@@ -1,7 +1,7 @@
 
 #define MAX_FOOD_COOK_COUNT 3
 
-#define COOKER_STRIP_RAW 0x1
+#define COOKER_STRIP_RAW FLAG(0)
 
 /obj/item/reagent_containers/food/snacks/var/list/cooked_with
 
@@ -217,7 +217,7 @@
 	result.filling_color = BlendRGB(source.color || "#ffffff", result.color || "#ffffff", 0.5)
 	if (result.type != /obj/item/reagent_containers/food/snacks/variable && istype(result, /obj/item/reagent_containers/food/snacks/variable))
 		var/image/I = image(result.icon, result, "[result.icon_state]_filling")
-		I.appearance_flags = RESET_COLOR
+		I.appearance_flags = DEFAULT_APPEARANCE_FLAGS | RESET_COLOR
 		I.color = result.filling_color
 		result.overlays += I
 

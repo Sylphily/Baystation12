@@ -203,7 +203,7 @@
 	display_name = "killer tomato plant"
 	mutants = null
 	can_self_harvest = TRUE
-	has_mob_product = /mob/living/simple_animal/friendly/tomato
+	has_mob_product = /mob/living/simple_animal/passive/tomato
 
 /datum/seed/tomato/killer/New()
 	..()
@@ -403,7 +403,7 @@
 	display_name = "walking mushrooms"
 	mutants = null
 	can_self_harvest = TRUE
-	has_mob_product = /mob/living/simple_animal/friendly/mushroom
+	has_mob_product = /mob/living/simple_animal/passive/mushroom
 
 /datum/seed/mushroom/plump/walking/New()
 	..()
@@ -1275,6 +1275,50 @@
 	set_trait(TRAIT_IDEAL_HEAT, 298)
 	set_trait(TRAIT_IDEAL_LIGHT, 6)
 	set_trait(TRAIT_WATER_CONSUMPTION, 6)
+
+/datum/seed/resin
+	name = "resinplant"
+	seed_name = "resin plant"
+	display_name = "resin plant"
+	chems = list(/datum/reagent/resinpulp = list(6,1))
+	mutants = null
+	exude_gasses = list(null)
+
+/datum/seed/resin/New()
+	..()
+	set_trait(TRAIT_HARVEST_REPEAT,1)
+	set_trait(TRAIT_MATURATION,5)
+	set_trait(TRAIT_PRODUCTION,1)
+	set_trait(TRAIT_YIELD,5)
+	set_trait(TRAIT_POTENCY,1)
+	set_trait(TRAIT_PRODUCT_COLOUR,"#3a4e1b")
+	set_trait(TRAIT_PLANT_COLOUR,"#5e41be")
+	set_trait(TRAIT_PRODUCT_ICON,"resin")
+	set_trait(TRAIT_PLANT_ICON,"resin")
+	set_trait(TRAIT_IDEAL_LIGHT, 6)
+	set_trait(TRAIT_WATER_CONSUMPTION, 6)
+
+/datum/seed/breather
+	name = "breather"
+	seed_name = "breather"
+	display_name = "breather"
+	chems = list(
+		/datum/reagent/nutriment = list(2,12),
+		/datum/reagent/ammonia = list(3,8)
+	)
+	exude_gasses = list(GAS_NITROGEN = 3)
+
+/datum/seed/breather/New()
+	..()
+	set_trait(TRAIT_MATURATION,6)
+	set_trait(TRAIT_PRODUCTION,5)
+	set_trait(TRAIT_YIELD,4)
+	set_trait(TRAIT_POTENCY,10)
+	set_trait(TRAIT_PRODUCT_ICON,"breather")
+	set_trait(TRAIT_PLANT_ICON,"breather")
+	set_trait(TRAIT_WATER_CONSUMPTION, 4)
+	set_trait(TRAIT_NUTRIENT_CONSUMPTION, 1)
+	set_trait(TRAIT_LIGHT_TOLERANCE, 6)
 
 // Fruit Expansion
 

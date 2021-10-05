@@ -1,8 +1,13 @@
-//This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:31
-
 /*
  * A large number of misc global procs.
  */
+
+/proc/subtypesof(datum/thing)
+	if (ispath(thing))
+		return typesof(thing) - thing
+	if (istype(thing))
+		return typesof(thing) - thing.type
+	return list()
 
 //Checks if all high bits in req_mask are set in bitfield
 #define BIT_TEST_ALL(bitfield, req_mask) ((~(bitfield) & (req_mask)) == 0)
@@ -202,8 +207,8 @@ Turf and target are seperate in case you want to teleport some distance from a t
 	var/dyabs=abs(dy)
 	var/sdx=sign(dx)	//Sign of x distance (+ or -)
 	var/sdy=sign(dy)
-	var/x=dxabs>>1	//Counters for steps taken, setting to distance/2
-	var/y=dyabs>>1	//Bit-shifting makes me l33t.  It also makes getline() unnessecarrily fast.
+	var/x=SHIFTR(dxabs, 1)	//Counters for steps taken, setting to distance/2
+	var/y=SHIFTR(dyabs, 1)	//Bit-shifting makes me l33t.  It also makes getline() unnessecarrily fast.
 	var/j			//Generic integer for counting
 	if(dxabs>=dyabs)	//x distance is greater than y
 		for(j=0;j<dxabs;j++)//It'll take dxabs steps to get there
@@ -353,7 +358,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 /proc/select_active_ai(mob/user, z)
 	var/list/ais = active_ais(z)
 	if(ais.len)
-		if(user)
+		if(user?.client)
 			. = input(user,"AI signals detected:", "AI selection") in ais
 		else
 			. = pick(ais)
@@ -666,7 +671,7 @@ proc/DuplicateObject(obj/original, var/perfectcopy = 0 , var/sameloc = 0)
 	if(perfectcopy)
 		if((O) && (original))
 			for(var/V in original.vars)
-				if(!(V in list("type","loc","locs","vars", "parent", "parent_type","verbs","ckey","key")))
+				if(!(V in list("type","loc","locs","vars", "parent", "parent_type","verbs","ckey","key", "group", "ai_holder", "natural_weapon")))
 					O.vars[V] = original.vars[V]
 	return O
 
@@ -1118,4 +1123,3 @@ GLOBAL_DATUM_INIT(dview_mob, /mob/dview, new)
 		M.start_pulling(t)
 	else
 		step(user.pulling, get_dir(user.pulling.loc, A))
-

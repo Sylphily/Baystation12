@@ -117,9 +117,6 @@
 /client/New(TopicData)
 	TopicData = null							//Prevent calls to client.Topic from connect
 
-	// Load goonchat
-	chatOutput = new(src)
-
 	switch (connection)
 		if ("seeker", "web") // check for invalid connection type. do nothing if valid
 		else return null
@@ -220,21 +217,24 @@
 	//DISCONNECT//
 	//////////////
 /client/Del()
-	ticket_panels -= src
-	if(src && watched_variables_window)
-		STOP_PROCESSING(SSprocessing, watched_variables_window)
-	if(holder)
-		holder.owner = null
-		GLOB.admins -= src
-	GLOB.ckey_directory -= ckey
-	GLOB.clients -= src
+	if (!QDELETED(src))
+		Destroy()
 	return ..()
 
+
 /client/Destroy()
+	if (holder)
+		holder.owner = null
+		GLOB.admins -= src
+	if (watched_variables_window)
+		STOP_PROCESSING(SSprocessing, watched_variables_window)
+	QDEL_NULL(chatOutput)
+	GLOB.ckey_directory -= ckey
+	ticket_panels -= src
+	GLOB.clients -= src
 	..()
 	return QDEL_HINT_HARDDEL_NOW
 
-// here because it's similar to below
 
 // Returns null if no DB connection can be established, or -1 if the requested key was not found in the database
 
@@ -408,11 +408,6 @@ client/verb/character_setup()
 	var/mob/living/M = mob
 	if(istype(M))
 		M.OnMouseDrag(src_object, over_object, src_location, over_location, src_control, over_control, params)
-
-	var/datum/click_handler/build_mode/B = M.GetClickHandler()
-	if (istype(B))
-		if(B.current_build_mode && src_control == "mapwindow.map" && src_control == over_control)
-			build_drag(src,B.current_build_mode,src_object,over_object,src_location,over_location,src_control,over_control,params)
 
 /client/verb/toggle_fullscreen()
 	set name = "Toggle Fullscreen"

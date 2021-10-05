@@ -27,6 +27,7 @@
 	max_storage_space = DEFAULT_BOX_STORAGE
 	use_sound = 'sound/effects/storage/box.ogg'
 	var/foldable = /obj/item/stack/material/cardboard	// BubbleWrap - if set, can be folded (when empty) into a sheet of cardboard
+	allow_slow_dump = TRUE
 
 /obj/item/storage/box/large
 	name = "large box"
@@ -175,6 +176,10 @@
 /obj/item/storage/box/ammo/shotgunshells
 	name = "box of shotgun shells"
 	startswith = list(/obj/item/ammo_magazine/shotholder/shell = 2)
+
+/obj/item/storage/box/ammo/flechetteshells
+	name = "box of flechette shells"
+	startswith = list(/obj/item/ammo_magazine/shotholder/flechette = 2)
 
 /obj/item/storage/box/ammo/flashshells
 	name = "box of illumination shells"

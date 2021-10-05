@@ -91,6 +91,7 @@
 	flags_inv = HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE|BLOCKHAIR
 	siemens_coefficient = 2.0
 	body_parts_covered = HEAD|FACE|EYES
+	item_flags = null
 
 /obj/item/clothing/head/cueball
 	name = "cueball helmet"
@@ -99,6 +100,7 @@
 	item_state = "cueball"
 	flags_inv = BLOCKHAIR
 	body_parts_covered = HEAD|FACE|EYES
+	item_flags = null
 
 /obj/item/clothing/head/cardborg
 	name = "cardborg helmet"
@@ -107,6 +109,7 @@
 	item_state = "cardborg_h"
 	flags_inv = HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE
 	body_parts_covered = HEAD|FACE|EYES
+	item_flags = null
 
 /obj/item/clothing/head/cardborg/Initialize()
 	. = ..()
@@ -231,6 +234,12 @@
 	icon_state = "fedora"
 	desc = "A sharp, stylish hat."
 
+/obj/item/clothing/head/panama
+	name = "panama hat"
+	icon_state = "panama"
+	desc = "A hat that makes you want to smuggle drugs."
+
+
 /obj/item/clothing/head/feathertrilby
 	name = "feather trilby"
 	icon_state = "feather_trilby"
@@ -281,6 +290,7 @@
 	flags_inv = HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE|BLOCKHAIR
 	siemens_coefficient = 2.0
 	body_parts_covered = HEAD|FACE|EYES
+	item_flags = null
 
 /obj/item/clothing/head/philosopher_wig
 	name = "natural philosopher's wig"

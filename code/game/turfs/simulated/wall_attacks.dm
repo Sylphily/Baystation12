@@ -105,7 +105,8 @@
 			if(I_DISARM, I_GRAB)
 				try_touch(M, rotting)
 			if(I_HURT)
-				if (!(M.organs_by_name[M.hand ? BP_L_HAND : BP_R_HAND].is_usable()))
+				var/obj/item/organ/external/organ_hand = M.organs_by_name[M.hand ? BP_L_HAND : BP_R_HAND]
+				if (!(organ_hand?.is_usable()))
 					to_chat(user, SPAN_WARNING("You can't use that hand."))
 					return
 				if(rotting && !reinf_material)
@@ -251,23 +252,21 @@
 			dismantle_sound = P.drill_sound
 			cut_delay -= P.digspeed
 
-		if(dismantle_verb && !dismantling)
+		if(dismantle_verb)
 
-			dismantling = TRUE
-			to_chat(user, "<span class='notice'>You begin [dismantle_verb] through the outer plating.</span>")
+			to_chat(user, SPAN_NOTICE("You begin [dismantle_verb] through the outer plating."))
 			if(dismantle_sound)
 				playsound(src, dismantle_sound, 100, 1)
 
 			if(cut_delay < 0)
 				cut_delay = 0
 
-			if(!do_after(user,cut_delay,src))
+			if (do_after(user, cut_delay, src, DO_DEFAULT | DO_TARGET_UNIQUE_ACT))
+				dismantle_wall()
+				user.visible_message(SPAN_WARNING("\The [src] was torn open by [user]!"), SPAN_NOTICE("You remove the outer plating."))
 				return
-
-			to_chat(user, "<span class='notice'>You remove the outer plating.</span>")
-			dismantle_wall()
-			user.visible_message("<span class='warning'>\The [src] was torn open by [user]!</span>")
-			return
+			else
+				return
 
 	//Reinforced dismantling.
 	else
@@ -299,7 +298,7 @@
 				if(isScrewdriver(W))
 					to_chat(user, "<span class='notice'>You begin removing the support lines.</span>")
 					playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
-					if(!do_after(user,40,src) || !istype(src, /turf/simulated/wall) || construction_stage != 5)
+					if(!do_after(user,40,src) || construction_stage != 5)
 						return
 					construction_stage = 4
 					update_icon()
@@ -329,7 +328,7 @@
 				if(cut_cover)
 					to_chat(user, "<span class='notice'>You begin slicing through the metal cover.</span>")
 					playsound(src, 'sound/items/Welder.ogg', 100, 1)
-					if(!do_after(user, 60, src) || !istype(src, /turf/simulated/wall) || construction_stage != 4)
+					if(!do_after(user, 60, src) || construction_stage != 4)
 						return
 					construction_stage = 3
 					update_icon()
@@ -339,7 +338,7 @@
 				if(isCrowbar(W))
 					to_chat(user, "<span class='notice'>You struggle to pry off the cover.</span>")
 					playsound(src, 'sound/items/Crowbar.ogg', 100, 1)
-					if(!do_after(user,100,src) || !istype(src, /turf/simulated/wall) || construction_stage != 3)
+					if(!do_after(user,100,src) || construction_stage != 3)
 						return
 					construction_stage = 2
 					update_icon()
@@ -349,7 +348,7 @@
 				if(isWrench(W))
 					to_chat(user, "<span class='notice'>You start loosening the anchoring bolts which secure the support rods to their frame.</span>")
 					playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
-					if(!do_after(user,40,src) || !istype(src, /turf/simulated/wall) || construction_stage != 2)
+					if(!do_after(user,40,src) || construction_stage != 2)
 						return
 					construction_stage = 1
 					update_icon()
@@ -372,7 +371,7 @@
 				if(cut_cover)
 					to_chat(user, "<span class='notice'>You begin slicing through the support rods.</span>")
 					playsound(src, 'sound/items/Welder.ogg', 100, 1)
-					if(!do_after(user,70,src) || !istype(src, /turf/simulated/wall) || construction_stage != 1)
+					if(!do_after(user,70,src) || construction_stage != 1)
 						return
 					construction_stage = 0
 					update_icon()
@@ -383,7 +382,7 @@
 				if(isCrowbar(W))
 					to_chat(user, "<span class='notice'>You struggle to pry off the outer sheath.</span>")
 					playsound(src, 'sound/items/Crowbar.ogg', 100, 1)
-					if(!do_after(user,100,src) || !istype(src, /turf/simulated/wall) || !user || !W || !T )	return
+					if(!do_after(user,100,src) || !W || !T )	return
 					if(user.loc == T && user.get_active_hand() == W )
 						to_chat(user, "<span class='notice'>You pry off the outer sheath.</span>")
 						dismantle_wall()

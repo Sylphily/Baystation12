@@ -44,7 +44,10 @@
 		// Just in case someone VVs the gender to something strange. It'll runtime anyway when it hits usages, better to CRASH() now with a helpful message.
 		CRASH("Gender datum was null; key was '[(skipjumpsuit && skipface) ? PLURAL : gender]'")
 
-	msg += "<EM>[src.name]</EM>"
+	if(src.fake_name)
+		msg += "<EM>[src.fake_name]</EM>"
+	else
+		msg += "<EM>[src.name]</EM>"
 
 	var/is_synth = isSynthetic()
 	if(!(skipjumpsuit && skipface))
@@ -164,7 +167,7 @@
 
 	if (src.stat)
 		msg += "<span class='warning'>[T.He] [T.is]n't responding to anything around [T.him] and seems to be unconscious.</span>\n"
-		if((stat == DEAD || is_asystole() || src.losebreath) && distance <= 3)
+		if((stat == DEAD || is_asystole() || losebreath || status_flags & FAKEDEATH) && distance <= 3)
 			msg += "<span class='warning'>[T.He] [T.does] not appear to be breathing.</span>\n"
 
 	if (fire_stacks > 0)
@@ -177,9 +180,9 @@
 	var/ssd_msg = species.get_ssd(src)
 	if(ssd_msg && (!should_have_organ(BP_BRAIN) || has_brain()) && stat != DEAD)
 		if(!key)
-			msg += "<span class='deadsay'>[T.He] [T.is] [ssd_msg]. [T.He] won't be recovering any time soon.</span>\n"
+			msg += SPAN_DEBUG("[T.He] [T.is] [ssd_msg]. [T.He] won't be recovering any time soon. (Ghosted)") + "\n"
 		else if(!client)
-			msg += "<span class='deadsay'>[T.He] [T.is] [ssd_msg].</span>\n"
+			msg += SPAN_DEBUG("[T.He] [T.is] [ssd_msg]. (Disconnected)") + "\n"
 
 	if (admin_paralyzed)
 		msg += SPAN_DEBUG("OOC: [T.He] [T.has] been paralyzed by staff. Please avoid interacting with [T.him] unless cleared to do so by staff.") + "\n"
@@ -265,7 +268,10 @@
 	for(var/obj/implant in get_visible_implants(0))
 		if(implant in shown_objects)
 			continue
-		msg += "<span class='danger'>[src] [T.has] \a [implant.name] sticking out of [T.his] flesh!</span>\n"
+		if(src.fake_name)
+			msg += "<span class='danger'>[src.fake_name] [T.has] \a [implant.name] sticking out of [T.his] flesh!</span>\n"
+		else
+			msg += "<span class='danger'>[src] [T.has] \a [implant.name] sticking out of [T.his] flesh!</span>\n"
 	if(digitalcamo)
 		msg += "[T.He] [T.is] repulsively uncanny!\n"
 
@@ -277,7 +283,10 @@
 		if(istype(id))
 			perpname = id.registered_name
 		else
-			perpname = src.name
+			if(src.fake_name)
+				perpname=src.fake_name
+			else
+				perpname=src.name
 
 		if(perpname)
 			var/datum/computer_file/report/crew_record/R = get_crewmember_record(perpname)
@@ -295,7 +304,10 @@
 		if(istype(id))
 			perpname = id.registered_name
 		else
-			perpname = src.name
+			if(src.fake_name)
+				perpname=src.fake_name
+			else
+				perpname=src.name
 
 		var/datum/computer_file/report/crew_record/R = get_crewmember_record(perpname)
 		if(R)
@@ -345,7 +357,10 @@
 	set desc = "Sets a description which will be shown when someone examines you."
 	set category = "IC"
 
-	pose =  sanitize(input(usr, "This is [src]. [get_visible_gender() == MALE ? "He" : get_visible_gender() == FEMALE ? "She" : "They"]...", "Pose", null)  as text)
+	if(src.fake_name)
+		pose =  sanitize(input(usr, "This is [src.fake_name]. [get_visible_gender() == MALE ? "He" : get_visible_gender() == FEMALE ? "She" : "They"]...", "Pose", null)  as text)
+	else
+		pose =  sanitize(input(usr, "This is [src]. [get_visible_gender() == MALE ? "He" : get_visible_gender() == FEMALE ? "She" : "They"]...", "Pose", null)  as text)
 
 /mob/living/carbon/human/verb/set_flavor()
 	set name = "Set Flavour Text"

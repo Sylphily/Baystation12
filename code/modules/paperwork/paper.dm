@@ -48,7 +48,7 @@
 	var/const/deffont = "Verdana"
 	var/const/signfont = "Times New Roman"
 	var/const/crayonfont = "Comic Sans MS"
-	var/const/fancyfont = "Segoe Script"
+	var/const/fancyfont = "Segoe Print"
 
 	var/scan_file_type = /datum/computer_file/data/text
 
@@ -64,11 +64,10 @@
 		log_debug("[src] ([type]) initialized with invalid or missing language `[old_language]` defined.")
 		set_language(LANGUAGE_HUMAN_EURO, TRUE)
 
-/obj/item/paper/proc/set_content(text,title)
+/obj/item/paper/proc/set_content(text, title, parse_pencode = TRUE)
 	if(title)
 		SetName(title)
-	info = html_encode(text)
-	info = parsepencode(text)
+	info = parse_pencode ? parsepencode(text) : text
 	update_icon()
 	update_space(info)
 	updateinfolinks()

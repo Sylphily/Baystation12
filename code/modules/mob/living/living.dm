@@ -139,12 +139,9 @@ default behaviour is:
 		spawn(0)
 			..()
 			var/saved_dir = AM.dir
+			if ((confused || (MUTATION_CLUMSY in mutations)) && !MOVING_DELIBERATELY(src))
+				AM.slam_into(src)
 			if (!istype(AM, /atom/movable) || AM.anchored)
-				if(confused && prob(50) && !MOVING_DELIBERATELY(src))
-					Weaken(2)
-					playsound(loc, "punch", 25, 1, -1)
-					visible_message("<span class='warning'>[src] [pick("ran", "slammed")] into \the [AM]!</span>")
-					src.apply_damage(5, BRUTE)
 				return
 			if (!now_pushing)
 				now_pushing = 1
@@ -409,9 +406,9 @@ default behaviour is:
 		if (C.handcuffed && !initial(C.handcuffed))
 			C.drop_from_inventory(C.handcuffed)
 		C.handcuffed = initial(C.handcuffed)
-	BITSET(hud_updateflag, HEALTH_HUD)
-	BITSET(hud_updateflag, STATUS_HUD)
-	BITSET(hud_updateflag, LIFE_HUD)
+	SET_BIT(hud_updateflag, HEALTH_HUD)
+	SET_BIT(hud_updateflag, STATUS_HUD)
+	SET_BIT(hud_updateflag, LIFE_HUD)
 	ExtinguishMob()
 	fire_stacks = 0
 
@@ -461,9 +458,9 @@ default behaviour is:
 	// make the icons look correct
 	regenerate_icons()
 
-	BITSET(hud_updateflag, HEALTH_HUD)
-	BITSET(hud_updateflag, STATUS_HUD)
-	BITSET(hud_updateflag, LIFE_HUD)
+	SET_BIT(hud_updateflag, HEALTH_HUD)
+	SET_BIT(hud_updateflag, STATUS_HUD)
+	SET_BIT(hud_updateflag, LIFE_HUD)
 
 	failed_last_breath = 0 //So mobs that died of oxyloss don't revive and have perpetual out of breath.
 	reload_fullscreen()
@@ -482,9 +479,9 @@ default behaviour is:
 	stat = CONSCIOUS
 	regenerate_icons()
 
-	BITSET(hud_updateflag, HEALTH_HUD)
-	BITSET(hud_updateflag, STATUS_HUD)
-	BITSET(hud_updateflag, LIFE_HUD)
+	SET_BIT(hud_updateflag, HEALTH_HUD)
+	SET_BIT(hud_updateflag, STATUS_HUD)
+	SET_BIT(hud_updateflag, LIFE_HUD)
 
 	failed_last_breath = 0 //So mobs that died of oxyloss don't revive and have perpetual out of breath.
 	reload_fullscreen()
@@ -822,12 +819,14 @@ default behaviour is:
 	. = 0
 	if(incapacitated(INCAPACITATION_UNRESISTING))
 		. += 100
-	if(eye_blind)
-		. += 75
+	if(confused)
+		. += 15
+	if(weakened)
+		. += 15
 	if(eye_blurry)
 		. += 15
-	if(confused)
-		. += 30
+	if(eye_blind)
+		. += 60
 	if(MUTATION_CLUMSY in mutations)
 		. += 40
 

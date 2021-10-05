@@ -32,7 +32,7 @@
 		/obj/item/storage/secure/safe,
 		/obj/structure/iv_drip,
 		/obj/machinery/disposal,
-		/mob/living/simple_animal/friendly/cow,
+		/mob/living/simple_animal/passive/cow,
 		/mob/living/simple_animal/hostile/retaliate/goat,
 		/obj/machinery/sleeper,
 		/obj/machinery/smartfridge/,
@@ -91,6 +91,9 @@
 /obj/item/reagent_containers/glass/throw_impact(atom/hit_atom)
 	if (QDELETED(src))
 		return
+	if (!LAZYISIN(matter, MATERIAL_GLASS))
+		return
+
 	if (prob(80))
 		if (reagents.reagent_list.len > 0)
 			visible_message(
